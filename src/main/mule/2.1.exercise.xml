@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="http_connector_exercise" doc:id="96f55d5b-1939-452a-98cd-d2f6f0659e5d" >
+		<http:listener doc:name="HTTP GET" doc:id="e3379949-eaef-4cbd-95ac-f75da517fb99" config-ref="HTTP_Listener_config" path="/exercise/{id}" allowedMethods="GET"/>
+		<logger level="INFO" doc:name="Log START" doc:id="fb98234e-8b45-48c1-ae5d-c8266f919c6e" message='#["LOG Start - " ++ flow.name]'/>
+		<set-variable value="attributes.uriParams.id" doc:name="Set Variable Uri Params" doc:id="5dc0a267-5584-438b-9cfd-0c640cdb779c" variableName="uriParams"/>
+		<set-variable value="#[attributes.queryParams]" doc:name="Set Variable Query Params" doc:id="708fb1a7-51c9-42b2-ae5a-254e83fea427" variableName="queryParams"/>
+		<set-payload value='#[%dw 2.0
+output application/json
+---
+{
+	"uriParams": {
+					"id": attributes.uriParams."id"
+				 }, 
+					"queryParams": attributes.queryParams
+}]' doc:name="Set Payload" doc:id="e850919e-cc60-4239-b613-a5249bb06884" />
+		<logger level="INFO" doc:name="Log END" doc:id="3ae1d14a-79fa-4cfb-ace2-0b34cd6dd81c" message='#["LOG End - " ++ flow.name]'/>
+	</flow>
+</mule>
